@@ -186,12 +186,16 @@ enable_icecc()
 # if running X
 if [ -n "$DISPLAY" ]; then
     # TMUX
-    if which tmux 2>&1 >/dev/null; then
+    which tmux 2>/dev/null >/dev/null
+    if [ "$?" -eq 0 ]; then
         gnome_terminal_solarized_dark
         set_gnome_terminal_transparency
 
         # if no session is started, start a new session
         test -z ${TMUX} && exec tmux -2
+    else
+        echo "Please install tmux: pacman -S tmux"
+        echo "Remember to also install powerline and its fonts from the AUR: python[2]-powerline-git / powerline-fonts"
     fi
 fi
 
