@@ -1,7 +1,27 @@
-filetype plugin on
-filetype indent on
+set nocompatible               " be iMproved
+filetype off                   " required!
 
-set nocompatible
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" let Vundle manage Vundle
+" $ git submodule init
+" $ git submodule update
+" $ BundleInstall [in vim]
+Bundle 'gmarik/vundle'
+
+" My Bundles here:
+"
+" original repos on github
+
+" To compile the required module, after BundleInstall:
+" $ cmake -G "Unix Makefiles" -DUSE_SYSTEM_LIBCLANG=ON . ~/.vim/bundle/YouCompleteMe/cpp
+" $ make ycm_core
+Bundle 'Valloric/YouCompleteMe'
+
+" ...
+
+filetype plugin indent on     " required!
 set background=dark
 set wrapmargin=8
 
@@ -40,7 +60,7 @@ set history=10000
 " set number
 set ruler
 set switchbuf=useopen
-
+set clipboard=unnamedplus
 
 if (&t_Co == 256)
     colorscheme jellybeans
