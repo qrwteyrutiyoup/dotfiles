@@ -5,7 +5,7 @@
 # If running bash
 if [ -n "$BASH_VERSION" ]; then
     # Include .bashrc if it exists
-    if [ -f. ~/.bashrc ]; then
+    if [ -f ~/.bashrc ]; then
         . ~/.bashrc
     fi
 fi
