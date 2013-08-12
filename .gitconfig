@@ -2,4 +2,7 @@
 	email = sergio@correia.cc
 	name = Sergio Correia
 [color]
-	ui = true
+    ui = auto
+    diff = auto
+    status = auto
+    branch = auto
