@@ -116,3 +116,9 @@ if &term =~ '256color'
     set t_ut=
 endif
 
+" Filetype actions {
+    if has("autocmd")
+        autocmd BufNewFile,BufRead *.pro,*.pri  set filetype=qmake
+        autocmd BufNewFile,BufRead *.qml,*.qmlproject set filetype=qml
+    endif
+" }
