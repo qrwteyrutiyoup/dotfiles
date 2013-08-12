@@ -19,8 +19,9 @@ for file in $(ls -A -I .git -I .gitignore -I .gitmodules -I README.md -I setup.s
         continue
     elif [ -e ~/$file ]; then
         bkpfile=$file-$(date +%Y%m%d%H%M%S)
-        echo "Backup'ing "$file" as ~/"$bkpfile
-        mv -f ~/$file ~/$bkpfile
+        echo "Backup'ing "$file" as ~/.dotfiles-backup/"$bkpfile
+        mkdir -p ~/.dotfiles-backup
+        mv -f ~/$file ~/.dotfiles-backup/$bkpfile
     fi
 
     echo "Linking "$fqfile" as ~/"$file
