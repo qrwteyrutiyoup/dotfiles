@@ -7,7 +7,7 @@ if ! which sudo >/dev/null 2>/dev/null; then
 fi
 
 echo "Installing required packages, if needed"
-sudo pacman -S --needed gvim clang ctags git tmux xorg-xwininfo xorg-xprop gnome-terminal cmake
+sudo pacman -S --needed gvim clang ctags git tmux xorg-xwininfo xorg-xprop gnome-terminal cmake ttf-ubuntu-font-family
 
 git submodule update --init
 git submodule foreach git checkout master

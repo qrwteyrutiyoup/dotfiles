@@ -1,7 +1,7 @@
 # If not running interactively, do not do anything.
 [[ $- != *i* ]] && return
 
-set_dircolors()
+_set_dircolors()
 {
     local DIRCOLORS=~/.dircolors
     if [ -f "$DIRCOLORS" ]; then
@@ -10,12 +10,37 @@ set_dircolors()
         echo "Please install a dircolors file at [$DIRCOLORS]; e.g: https://raw.github.com/seebi/dircolors-solarized/master/dircolors.256dark"
     fi
 }
+_package_installed()
+{
+    local pkg=$1
+    if [ -z "$pkg" ]; then
+        echo "Please provide a package name to check whether it's installed."
+        return
+    fi
+
+    pacman -Q "$pkg" 2>/dev/null >/dev/null
+    return $?
+}
+
+_enable_ubuntu_fonts()
+{
+    # nicer-looking font rendering
+    gsettings "set" "org.gnome.settings-daemon.plugins.xsettings" "hinting" "slight"
+    gsettings "set" "org.gnome.settings-daemon.plugins.xsettings" "antialiasing" "rgba"
+
+    for p in freetype2-ubuntu fontconfig-ubuntu cairo-ubuntu; do
+        if ! _package_installed "$p"; then
+            echo "-> Please install package '"$p"' from the AUR"
+        fi
+    done
+}
 
 # adapted from https://github.com/sigurdga/gnome-terminal-colors-solarized
-gnome_terminal_solarized_dark()
+_gnome_terminal_solarized_dark()
 {
+    local force=$1
     local SOLARIZED_TERMINAL=~/.config/.solarized
-    if [ -f "$SOLARIZED_TERMINAL" ]; then
+    if [[ -f "$SOLARIZED_TERMINAL" ]] && [[ -z $force ]]; then
         return
     fi
 
@@ -55,14 +80,18 @@ gnome_terminal_solarized_dark()
 }
 
 # from https://gist.github.com/nirbheek/5589105
-set_gnome_terminal_transparency()
+_set_gnome_terminal_transparency()
 {
-    : ${XWININFO:=$(type -P xwininfo)}
-    [[ -z ${XWININFO} ]] && { echo "You need to install xorg-xwininfo: pacman -S xorg-xwininfo"; exit 1; }
-    : ${XPROP:=$(type -P xprop)}
-    [[ -z ${XPROP} ]] && { echo "You need to install xorg-xprop: pacman -S xorg-xprop"; exit 1; }
+    if [[ -z ${DISPLAY} ]] || [[ -z ${TMUX} ]]; then
+        return
+    fi
 
-    TRANSPARENCY_PERCENT=95
+    : ${XWININFO:=$(type -P xwininfo)}
+    [[ -z ${XWININFO} ]] && { echo "You need to install xorg-xwininfo: pacman -S xorg-xwininfo"; return; }
+    : ${XPROP:=$(type -P xprop)}
+    [[ -z ${XPROP} ]] && { echo "You need to install xorg-xprop: pacman -S xorg-xprop"; return; }
+
+    TRANSPARENCY_PERCENT=93
 
     # This is very fragile
     TERMINAL_WINDOW_XID=$("$XWININFO" -root -tree | grep -v "Terminal" | sed -n 's/^[[:space:]]\+\([0-9a-fx]\+\).*gnome-terminal.*/\1/p')
@@ -88,7 +117,7 @@ __git_ps1()
     fi
 }
 
-set_ps1()
+_set_ps1()
 {
 
     if [[ $COLORTERM = gnome-* && $TERM = xterm* ]] && infocmp gnome-256color >/dev/null 2>&1; then export TERM=xterm-256color; fi
@@ -141,7 +170,7 @@ set_ps1()
     fi
 }
 
-set_default_aliases_and_exports()
+_set_default_aliases_and_exports()
 {
     # custom silly and colorful ls aliases
     alias ls="ls --color"
@@ -164,7 +193,7 @@ set_default_aliases_and_exports()
     [ -n "$DISPLAY" ] && export TERM="xterm-256color"
 }
 
-set_odd_aliases()
+_set_odd_aliases()
 {
     # mplayer having problems with hdmi + audio / check out $ aplay -l
     # alias mplayer-hdmi="mplayer -ao alsa:device=hw=1.7"
@@ -173,12 +202,12 @@ set_odd_aliases()
     alias sendpatch="arc diff --reviewers hugopl,lmoura,tullio,luck,dakerfp,lacerda,setanta,nick HEAD~1"
 }
 
-enable_icecc()
+_enable_icecc()
 {
     export ICECC_VERSION=~/.icecc/gcc48-x86_64-sergio-9b3f2094b14ce6119124d8ccadeff1a1.tar.gz
     mkdir -p ~/bin
     for c in gcc g++ cc c++; do
-        ln -sf /usr/bin/ccache ~/bin/${c}
+        # ln -sf /usr/bin/ccache ~/bin/${c}
         ln -sf /usr/lib/icecream/bin/icecc ~/bin/${c}
     done
 
@@ -186,7 +215,7 @@ enable_icecc()
     # ln -sf /usr/bin/ld.gold ~/bin/ld
 }
 
-compile_ycm_extension()
+_compile_ycm_extension()
 {
     local YCM_SANDBOX=~/.sandbox/ycm
     rm -rf $YCM_SANDBOX
@@ -212,12 +241,11 @@ compile_ycm_extension()
 }
 
 # if running X
-if [ -n "$DISPLAY" ]; then
+if [[ -n "$DISPLAY" ]] || [[ -n "$SSH_TTY" ]]; then
     # TMUX
-    which tmux 2>/dev/null >/dev/null
-    if [ "$?" -eq 0 ]; then
+    if _package_installed "tmux"; then
         # gnome_terminal_solarized_dark
-        set_gnome_terminal_transparency
+        _set_gnome_terminal_transparency
 
         # if no session is started, start a new session
         test -z ${TMUX} && exec tmux -2
@@ -227,8 +255,8 @@ if [ -n "$DISPLAY" ]; then
     fi
 fi
 
-set_default_aliases_and_exports
-set_odd_aliases
-set_ps1
-set_dircolors
-# enable_icecc
+_set_default_aliases_and_exports
+_set_odd_aliases
+_set_ps1
+_set_dircolors
+# _enable_icecc
