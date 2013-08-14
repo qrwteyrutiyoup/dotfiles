@@ -4,10 +4,12 @@
 _set_dircolors()
 {
     local DIRCOLORS=~/.dircolors
-    if [ -f "$DIRCOLORS" ]; then
-        eval $(dircolors "$DIRCOLORS")
+    local DIRCOLORS_ANSI_DARK=~/.dircolors.ansi.dark
+
+    if [[ -z ${DISPLAY} ]] || [[ -z ${TMUX} ]]; then
+        eval $(dircolors ${DIRCOLORS_ANSI_DARK})
     else
-        echo "Please install a dircolors file at [$DIRCOLORS]; e.g: https://raw.github.com/seebi/dircolors-solarized/master/dircolors.256dark"
+        eval $(dircolors ${DIRCOLORS})
     fi
 }
 _package_installed()
@@ -117,9 +119,18 @@ __git_ps1()
     fi
 }
 
+_set_regular_ps1()
+{
+    # good and old slackware-like PS1
+    export PS1="\u@\h:\w$(__git_ps1)\$ "
+}
+
 _set_ps1()
 {
-    if [ $TERM != linux ] && tput setaf 1 &> /dev/null; then
+
+    if [[ -z ${DISPLAY} ]] || [[ -z ${TMUX} ]]; then
+        _set_regular_ps1
+    elif tput setaf 1 &> /dev/null; then
         tput sgr0
         if [[ $(tput colors) -ge 256 ]] 2>/dev/null; then
             # heavily based on https://gist.github.com/SeanPONeil/3717199
@@ -163,8 +174,7 @@ _set_ps1()
         RESET=$(tput sgr0)
         export PS1="\[${BOLD}${CYAN}\]\u\[$BASE0\]@\[$CYAN\]\h\[$BASE0\]:\[$BLUE\]\w\[$BASE0\]\[$YELLOW\]\$(__git_ps1)\[$BASE0\]\$ \[$RESET\]"
     else
-        # good and old slackware-like PS1
-        export PS1="\u@\h:\w$(__git_ps1)\$ "
+        _set_regular_ps1
     fi
 }
 
