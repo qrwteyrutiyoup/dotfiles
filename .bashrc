@@ -238,21 +238,27 @@ _compile_ycm_extension()
     popd
 }
 
-# if running X
-if [[ -n "$DISPLAY" ]] || [[ -n "$SSH_TTY" ]]; then
-    # TMUX
-    if _package_installed "tmux"; then
-        # gnome_terminal_solarized_dark
-        _set_gnome_terminal_transparency
+_set_tmux()
+{
+    # if running X or inside an SSH session
+    if [[ -n "$DISPLAY" ]] || [[ -n "$SSH_TTY" ]]; then
+        # TMUX
+        if _package_installed "tmux"; then
+            test -f ~/.notmux && return
 
-        # if no session is started, start a new session
-        test -z ${TMUX} && exec tmux -2
-    else
-        echo "Please install tmux: pacman -S tmux"
-        echo "Remember to also install powerline and its fonts from the AUR: python[2]-powerline-git / powerline-fonts"
+            # gnome_terminal_solarized_dark
+            _set_gnome_terminal_transparency
+
+            # if no session is started, start a new session
+            test -z ${TMUX} && exec tmux -2
+        else
+            echo "Please install tmux: pacman -S tmux"
+            echo "Remember to also install powerline and its fonts from the AUR: python[2]-powerline-git / powerline-fonts"
+        fi
     fi
-fi
+}
 
+_set_tmux
 _set_default_aliases_and_exports
 _set_odd_aliases
 _set_ps1
