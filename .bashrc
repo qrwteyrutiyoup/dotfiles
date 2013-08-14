@@ -119,8 +119,6 @@ __git_ps1()
 
 _set_ps1()
 {
-
-    if [[ $COLORTERM = gnome-* && $TERM = xterm* ]] && infocmp gnome-256color >/dev/null 2>&1; then export TERM=xterm-256color; fi
     if [ $TERM != linux ] && tput setaf 1 &> /dev/null; then
         tput sgr0
         if [[ $(tput colors) -ge 256 ]] 2>/dev/null; then
@@ -189,8 +187,8 @@ _set_default_aliases_and_exports()
     # user-defined bin path to drop custom executables
     export PATH=~/bin:$PATH
 
-    # nicer terminal in X
-    [ -n "$DISPLAY" ] && export TERM="xterm-256color"
+    # nicer terminal colors, if available
+    if infocmp xterm-256color >/dev/null 2>&1; then export TERM=xterm-256color; fi
 }
 
 _set_odd_aliases()
