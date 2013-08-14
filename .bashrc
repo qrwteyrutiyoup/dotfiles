@@ -186,6 +186,31 @@ enable_icecc()
     # ln -sf /usr/bin/ld.gold ~/bin/ld
 }
 
+compile_ycm_extension()
+{
+    local YCM_SANDBOX=~/.sandbox/ycm
+    rm -rf $YCM_SANDBOX
+    mkdir -p $YCM_SANDBOX
+    pushd $YCM_SANDBOX
+
+    # try to use ccache
+    local OLDPATH=$PATH
+    local CCACHE_PATH=/usr/lib/ccache/bin
+    if [ -d $CCACHE_PATH ]; then
+        export PATH=$CCACHE_PATH:$PATH
+    fi
+
+    cmake -G "Unix Makefiles" -DUSE_SYSTEM_LIBCLANG=ON . ~/.vim/bundle/YouCompleteMe/cpp
+    time make ycm_core -j$(nproc)
+
+    # restore PATH
+    if [ -d $CCACHE_PATH ]; then
+        export PATH=$OLDPATH
+    fi
+
+    popd
+}
+
 # if running X
 if [ -n "$DISPLAY" ]; then
     # TMUX
