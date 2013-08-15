@@ -119,10 +119,19 @@ __git_ps1()
     fi
 }
 
+_ps1_terminator_char()
+{
+    if [ $(whoami) == "root" ]; then
+        printf '#'
+    else
+        printf '$'
+    fi
+}
+
 _set_regular_ps1()
 {
     # good and old slackware-like PS1
-    export PS1="\u@\h:\w$(__git_ps1)\$ "
+    export PS1="\u@\h:\w$(__git_ps1)\$(_ps1_terminator_char) "
 }
 
 _set_ps1()
@@ -172,7 +181,8 @@ _set_ps1()
         fi
         BOLD=$(tput bold)
         RESET=$(tput sgr0)
-        export PS1="\[${BOLD}${CYAN}\]\u\[$BASE0\]@\[$CYAN\]\h\[$BASE0\]:\[$BLUE\]\w\[$BASE0\]\[$YELLOW\]\$(__git_ps1)\[$BASE0\]\$ \[$RESET\]"
+        export
+        PS1="\[${BOLD}${CYAN}\]\u\[$BASE0\]@\[$CYAN\]\h\[$BASE0\]:\[$BLUE\]\w\[$BASE0\]\[$YELLOW\]\$(__git_ps1)\[$BASE0\]\$(_ps1_terminator_char) \[$RESET\]"
     else
         _set_regular_ps1
     fi
