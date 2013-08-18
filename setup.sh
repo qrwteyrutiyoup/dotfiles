@@ -7,7 +7,7 @@ if ! which sudo >/dev/null 2>/dev/null; then
 fi
 
 echo "Installing required packages, if needed"
-sudo pacman -S --needed gvim clang ctags git tmux xorg-xwininfo xorg-xprop gnome-terminal cmake ttf-ubuntu-font-family
+sudo pacman -S --needed gvim clang ctags git tmux xorg-xwininfo xorg-xprop gnome-terminal cmake ttf-ubuntu-font-family libxtst
 
 git submodule update --init
 git submodule foreach git checkout master
@@ -29,6 +29,6 @@ for file in $(ls -A -I .git -I .gitignore -I .gitmodules -I README.md -I setup.s
     ln -sf $fqfile ~/
 done
 
-# install the bundles
+# install the vim bundles
 echo "Installing vim bundles"
 vim +BundleInstall +q +q

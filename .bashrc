@@ -258,6 +258,13 @@ _compile_ycm_extension()
     popd
 }
 
+_compile_mplayer_screensaver_workaround()
+{
+    pushd ~/.mplayer
+    make
+    popd
+}
+
 _set_tmux()
 {
     # if running X or inside an SSH session

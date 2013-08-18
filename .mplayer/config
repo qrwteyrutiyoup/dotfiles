@@ -1,0 +1,4 @@
+# ugly workaround so that the screensaver won't show up when we are
+# watching a movie on mplayer. You should compile this small program
+# as well, naturally.
+heartbeat-cmd="~/.mplayer/sendXShift"
