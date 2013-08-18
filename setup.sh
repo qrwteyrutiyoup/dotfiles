@@ -11,6 +11,7 @@ sudo pacman -S --needed gvim clang ctags git tmux xorg-xwininfo xorg-xprop gnome
 
 git submodule update --init
 git submodule foreach git checkout master
+git submodule foreach git pull
 
 for file in $(ls -A -I .git -I .gitignore -I .gitmodules -I README.md -I setup.sh -I .*.swp); do
     fqfile=$PWD/$file
