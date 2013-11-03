@@ -1,0 +1,96 @@
+#!/bin/bash
+
+function _enable_nicer_fonts()
+{
+    # nicer-looking font rendering
+    gsettings "set" "org.gnome.settings-daemon.plugins.xsettings" "hinting" "slight"
+    gsettings "set" "org.gnome.settings-daemon.plugins.xsettings" "antialiasing" "rgba"
+
+    for p in freetype2-infinality lib32-freetype2-infinality fontconfig-infinality; do
+        if ! _package_installed "$p"; then
+            echo "-> Please install package '"$p"' from the AUR"
+        fi
+    done
+}
+
+function _set_odd_aliases()
+{
+    # mplayer having problems with hdmi + audio / check out $ aplay -l
+    # alias mplayer-hdmi="mplayer -ao alsa:device=hw=1.7"
+
+    # phabricator
+    alias sendpatch="arc diff --reviewers hugopl,lmoura,tullio,luck,dakerfp,lacerda,setanta,nick,zanoni HEAD~1"
+}
+
+function _enable_icecc()
+{
+    export ICECC_VERSION=~/.icecc/gcc482-x86_64-e83cf8b56daafcdb71df84e892b8459d.tar.gz
+    # export CCACHE_PREFIX=/usr/lib/icecream/bin/icecc
+    mkdir -p ~/bin
+    for c in gcc g++ cc c++; do
+        #ln -sf /usr/bin/ccache ~/bin/${c}
+       ln -sf /usr/lib/icecream/bin/icecc ~/bin/${c}
+    done
+
+    # gold linker - may be problematic in some cases. used mostly for webkit
+    # ln -sf /usr/bin/ld.gold ~/bin/ld
+}
+
+function build()
+{
+    local port="${1}"
+    shift
+    local args="${@}"
+
+    local WEBKITDIR=~/projects/webkit
+    case "${port}" in
+    nix)
+        export WEBKIT_OUTPUTDIR=${WEBKITDIR}/nix-build
+        pushd ${WEBKITDIR}
+        Tools/Scripts/build-webkit --nix --debug --prefix=~/nixbuild ${args}
+        popd
+        ;;
+    nix-release)
+        export WEBKIT_OUTPUTDIR=${WEBKITDIR}/nix-build
+        pushd ${WEBKITDIR}
+        Tools/Scripts/build-webkit --nix --release --prefix=~/nixbuild ${args}
+        popd
+        ;;
+    efl)
+        export WEBKIT_OUTPUTDIR=${WEBKITDIR}/efl-build
+        pushd ${WEBKITDIR}
+        Tools/Scripts/build-webkit --efl --no-webkit1 --debug --cmakeargs="-DSHARED_CORE=ON" ${args}
+        popd
+        ;;
+    efl-release)
+        export WEBKIT_OUTPUTDIR=${WEBKITDIR}/efl-build
+        pushd ${WEBKITDIR}
+        Tools/Scripts/build-webkit --efl --no-webkit1 --release --cmakeargs="-DSHARED_CORE=ON" ${args}
+        popd
+        ;;
+    gtk)
+        export WEBKIT_OUTPUTDIR=${WEBKITDIR}/gtk-build
+        pushd ${WEBKITDIR}
+        Tools/Scripts/build-webkit --gtk --no-webkit1 --debug ${args}
+        popd
+        ;;
+     gtk-release)
+        export WEBKIT_OUTPUTDIR=${WEBKITDIR}/gtk-build
+        pushd ${WEBKITDIR}
+        Tools/Scripts/build-webkit --gtk --no-webkit1 --release ${args}
+        popd
+        ;;
+    esac
+}
+
+function nix_env()
+{
+    export LD_LIBRARY_PATH=~/nixbuild/lib/:~/projects/webkit/WebKitBuild/Dependencies/Root/lib64/
+    export PKG_CONFIG_PATH=~/nixbuild/lib/pkgconfig/:~/projects/webkit/WebKitBuild/Dependencies/Root/lib64/pkgconfig/
+}
+
+_set_odd_aliases
+_enable_icecc
+
+if [[ -f ~/.virtualenvs/webkit/bin/activate ]]; then . ~/.virtualenvs/webkit/bin/activate; fi
+if [[ -f ~/.confidentialrc ]]; then . ~/.confidentialrc; fi

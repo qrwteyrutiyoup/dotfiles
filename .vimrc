@@ -19,6 +19,10 @@ Bundle 'gmarik/vundle'
 " $ make ycm_core
 Bundle 'Valloric/YouCompleteMe'
 
+"Easy tags
+Bundle 'xolox/vim-misc'
+Bundle 'xolox/vim-easytags'
+
 " ...
 
 filetype plugin indent on     " required!
@@ -122,3 +126,12 @@ endif
         autocmd BufNewFile,BufRead *.qml,*.qmlproject set filetype=qml
     endif
 " }
+
+" EasyTags config
+let g:easytags_file = '~/.vim/tags'
+let g:easytags_autorecurse = 0
+let g:easytags_include_members = 1
+let g:easytags_resolve_links = 1
+let g:easytags_updatetime_warn = 0 " Disable ctags updatetime warnings
+let g:easytags_auto_highlight = 0
+

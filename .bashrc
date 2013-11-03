@@ -6,10 +6,10 @@ _set_dircolors()
     local DIRCOLORS=~/.dircolors
     local DIRCOLORS_ANSI_DARK=~/.dircolors.ansi.dark
 
-    if [[ -z ${DISPLAY} ]]; then
-        eval $(dircolors ${DIRCOLORS_ANSI_DARK})
-    else
+    if [[ -n ${DISPLAY} ]] || [[ -n ${TMUX} ]] || [[ -n "$SSH_TTY" ]]; then
         eval $(dircolors ${DIRCOLORS})
+    else
+        eval $(dircolors ${DIRCOLORS_ANSI_DARK})
     fi
 }
 _package_installed()
@@ -22,19 +22,6 @@ _package_installed()
 
     pacman -Q "$pkg" 2>/dev/null >/dev/null
     return $?
-}
-
-_enable_ubuntu_fonts()
-{
-    # nicer-looking font rendering
-    gsettings "set" "org.gnome.settings-daemon.plugins.xsettings" "hinting" "slight"
-    gsettings "set" "org.gnome.settings-daemon.plugins.xsettings" "antialiasing" "rgba"
-
-    for p in freetype2-ubuntu fontconfig-ubuntu cairo-ubuntu; do
-        if ! _package_installed "$p"; then
-            echo "-> Please install package '"$p"' from the AUR"
-        fi
-    done
 }
 
 # adapted from https://github.com/sigurdga/gnome-terminal-colors-solarized
@@ -84,7 +71,7 @@ _gnome_terminal_solarized_dark()
 # from https://gist.github.com/nirbheek/5589105
 _set_gnome_terminal_transparency()
 {
-    if [[ -z ${DISPLAY} ]] || [[ -z ${TMUX} ]]; then
+    if [[ -z ${DISPLAY} ]] && [[ -z ${TMUX} ]] && [[ -n "$SSH_TTY" ]]; then
         return
     fi
 
@@ -136,7 +123,7 @@ _set_regular_ps1()
 
 _set_ps1()
 {
-    if [[ -n "$DISPLAY" ]] || [[ -n "$SSH_TTY" ]]; then
+    if [[ -n "$DISPLAY" ]] || [[ -n "$SSH_TTY" ]] || [[ -n ${TMUX} ]]; then
         if tput setaf 1 &> /dev/null; then
             tput sgr0
             if [[ $(tput colors) -ge 256 ]] 2>/dev/null; then
@@ -211,28 +198,6 @@ _set_default_aliases_and_exports()
     if infocmp xterm-256color >/dev/null 2>&1; then export TERM=xterm-256color; fi
 }
 
-_set_odd_aliases()
-{
-    # mplayer having problems with hdmi + audio / check out $ aplay -l
-    # alias mplayer-hdmi="mplayer -ao alsa:device=hw=1.7"
-
-    # phabricator
-    alias sendpatch="arc diff --reviewers hugopl,lmoura,tullio,luck,dakerfp,lacerda,setanta,nick HEAD~1"
-}
-
-_enable_icecc()
-{
-    export ICECC_VERSION=~/.icecc/gcc48-x86_64-sergio-9b3f2094b14ce6119124d8ccadeff1a1.tar.gz
-    mkdir -p ~/bin
-    for c in gcc g++ cc c++; do
-        # ln -sf /usr/bin/ccache ~/bin/${c}
-        ln -sf /usr/lib/icecream/bin/icecc ~/bin/${c}
-    done
-
-    # gold linker - may be problematic in some cases. used mostly for webkit
-    # ln -sf /usr/bin/ld.gold ~/bin/ld
-}
-
 _compile_ycm_extension()
 {
     local YCM_SANDBOX=~/.sandbox/ycm
@@ -267,12 +232,14 @@ _compile_mplayer_screensaver_workaround()
 
 _set_tmux()
 {
+    if [ ! -f ~/.starttmux ]; then
+        return
+    fi
+
     # if running X or inside an SSH session
     if [[ -n "$DISPLAY" ]] || [[ -n "$SSH_TTY" ]]; then
         # TMUX
         if _package_installed "tmux"; then
-            test -f ~/.notmux && return
-
             # gnome_terminal_solarized_dark
             _set_gnome_terminal_transparency
 
@@ -287,7 +254,9 @@ _set_tmux()
 
 _set_tmux
 _set_default_aliases_and_exports
-_set_odd_aliases
 _set_ps1
 _set_dircolors
-# _enable_icecc
+
+if [[ -f ~/.customrc ]]; then
+    . ~/.customrc
+fi

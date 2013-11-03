@@ -9,3 +9,7 @@ if [ -n "$BASH_VERSION" ]; then
         . ~/.bashrc
     fi
 fi
+
+if [[ -n ${DISPLAY} ]] && [[ -f ~/.xprofile ]]; then
+    . ~/.xprofile
+fi
