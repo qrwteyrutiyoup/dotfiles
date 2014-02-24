@@ -51,10 +51,10 @@ build()
         Tools/Scripts/build-webkit --nix --prefix=~/nixbuild ${args}
         ;;
     efl)
-        Tools/Scripts/build-webkit --efl --no-webkit1 --cmakeargs="-DSHARED_CORE=ON" ${args}
+        Tools/Scripts/build-webkit --efl --cmakeargs="-DSHARED_CORE=ON" ${args}
         ;;
     gtk)
-        Tools/Scripts/build-webkit --gtk --no-webkit1 ${args}
+        Tools/Scripts/build-webkit --gtk ${args}
         ;;
     *)
         echo "Usage: build <nix|efl|gtk> [optional args]"
