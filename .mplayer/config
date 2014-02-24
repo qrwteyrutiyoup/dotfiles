@@ -2,3 +2,109 @@
 # watching a movie on mplayer. You should compile this small program
 # as well, naturally.
 heartbeat-cmd="~/.mplayer/sendXShift"
+
+# Write your default config options here!
+cache=8000
+vo=vaapi
+vc=ffh264vdpau,ffmpeg12vdpau,
+ao=alsa
+
+ass=true
+#Turn on SSA/ASS subtitle rendering. With this option, libass will be used for SSA/ASS external subtitles and Matroska tracks. You may also want to use embeddedfonts.
+#NOTE: Unlike normal OSD, libass uses fontconfig by default. To disable it, use nofontconfig.
+
+ass-border-color=0x00000040
+# Sets the border (outline) color for text subtitles. The color format is RRGGBBAA. <-- actually it is AABBGGRR; 12345678 goes 78563412
+# transparency % value: 100 95 90 85 80 75 70 65 60 55 50 45 40 35 30 25 20 15 10 5  0
+# adding after   "0x" :  FF F2 E6 D9 CC BF B3 A6 99 8C 80 73 66 59 4D 40 33 26 1A 0D 00
+# e.g. "black" 25% transparent would be: 0x4000EFFF
+
+ass-color=0xFFEF0026
+# Sets the color for text subtitles. The color format is RRGGBBAA. <-- actually it is AABBGGRR; 12345678 goes 78563412
+# e.g. "process yellow" 15% transparent would be: 0x2600EFFF
+
+ass-font-scale=1.05
+# Set the scale coefficient to be used for fonts in the SSA/ASS renderer.
+# 0-100
+
+#ass-force-style="FontName=FreeSans,Default.Bold=1,PrimaryColour=0x2600EFFF,OutlineColour=0x40000000,Outline=1,Shadow=1,Italic=0,BackColour=0x40000000,SecondaryColour=0x40FFFFFF,BorderStyle=1,Underline=0,Strikeout=0"
+# Override some style or script info parameters.
+# e.g. ass-force-style=FontName=FreeSans,Default.Bold=1
+
+ass-hinting=7
+# 0 - no hinting
+# 1 - FreeType autohinter, light mode
+# 2 - FreeType autohinter, normal mode
+# 3 - font native hinter
+# 03 + 4 - The same, but hinting will only be performed if the OSD is rendered at screen resolution and will therefore not be scaled.
+# The default value is 7 (use native hinter for unscaled OSD and no hinting otherwise).
+
+
+embeddedfonts=true
+# Enables extraction of Matroska embedded fonts (default: disabled). These fonts can be used for SSA/ASS subtitle rendering (ass option). Font files are created in the ~/.mplayer/fonts directory.
+# NOTE: With FontConfig 2.4.2 or newer, embedded fonts are opened directly from memory, and this option is enabled by default.
+
+font="FreeSans:style=Bold"
+# font="FreeSans:style=BoldOblique"
+# font="FreeSans:style=Medium"
+# font="FreeSans:style=Oblique"
+# font="Verdana:style=Bold"
+# font="FreeUniversal:style=Bold"
+# With Fontconfig, this option determines the Fontconfig font pattern.
+
+fontconfig=true
+# Enables the usage of fontconfig managed fonts.
+# NOTE: By default fontconfig is used for libassrendered subtitles and not used for OSD. With -fontconfig it is used for both libass and OSD, with -nofontconfig it is not used at all.
+
+
+spuaa=4
+# Antialiasing/scaling mode for DVD/VOBsub. A value of 16 may be added to <mode> in order to force scaling even when original and scaled frame size already match. This can be employed to e.g. smooth subtitles with gaussian blur. Available modes are:
+# 0 - none (fastest, very ugly)
+# 1 - approximate (broken?)
+# 2 - full (slow)
+# 3 - bilinear (default, fast and not too bad)
+# 4 - uses swscaler gaussian blur (looks very good)
+
+spugauss=2.5
+# Variance parameter of gaussian used by spuaa 4. Higher means more blur (default: 1.0); 0.0-3.0
+
+sub-bg-alpha=200 # default?
+# Specify the alpha channel value for subtitles and OSD backgrounds. Big values mean more transparency. 0 means completely transparent; 0-255
+
+sub-bg-color=0 # default?
+# Specify the color value for subtitles and OSD backgrounds. Currently subtitles are grayscale so this value is equivalent to the intensity of the color. 255 means white and 0 black.
+
+subfont-autoscale=3
+# NOTE: 0 means that text scale and OSD scale are font heights in points.
+# 0 - no autoscale
+# 1 - proportional to movie height
+# 2 - proportional to movie width
+# 3 - proportional to movie diagonal (default)
+
+subfont-blur=1
+# Sets the font blur radius (default: 2); 0-8; 1/2 the value of ffactor and subfont-outline seems good
+
+subfont-osd-scale=3
+# Sets the autoscale coefficient of the OSD elements (default: 6); 0-100
+
+subfont-outline=2
+# Sets the font outline thickness (default: 2); 0-8
+
+ffactor=2
+# Resample the font alphamap. Can be:
+# 0    - plain white fonts
+# 0.75 - very narrow black outline (default)
+# 1    - narrow black outline
+# 10   - bold black outline
+
+subfont-text-scale=5
+# Sets the subtitle text autoscale coefficient as percentage of the screen size (default: 5); 0-100
+
+unicode=yes
+utf8=yes
+
+#vf=expand=0:-100:0:0
+#ass-use-margins=yes
+#ass-bottom-margin=300
+#spualign=2
+#subalign=2
