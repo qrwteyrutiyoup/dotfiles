@@ -213,7 +213,7 @@ _compile_ycm_extension()
     fi
 
     cmake -G "Unix Makefiles" -DUSE_SYSTEM_LIBCLANG=ON . ~/.vim/bundle/YouCompleteMe/cpp
-    time make ycm_core -j$(nproc)
+    time make ycm_support_libs -j$(nproc)
 
     # restore PATH
     if [ -d $CCACHE_PATH ]; then
