@@ -17,7 +17,7 @@ Bundle 'gmarik/vundle'
 " To compile the required module, after BundleInstall:
 " $ cmake -G "Unix Makefiles" -DUSE_SYSTEM_LIBCLANG=ON . ~/.vim/bundle/YouCompleteMe/cpp
 " $ make ycm_core
-Bundle 'Valloric/YouCompleteMe'
+"Bundle 'Valloric/YouCompleteMe'
 
 "Easy tags
 Bundle 'xolox/vim-misc'
