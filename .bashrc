@@ -212,7 +212,7 @@ _compile_ycm_extension()
         export PATH=$CCACHE_PATH:$PATH
     fi
 
-    cmake -G "Unix Makefiles" -DUSE_SYSTEM_LIBCLANG=ON . ~/.vim/bundle/YouCompleteMe/cpp
+    cmake -G "Unix Makefiles" -DUSE_SYSTEM_LIBCLANG=ON . ~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp
     time make ycm_support_libs -j$(nproc)
 
     # restore PATH
