@@ -120,6 +120,12 @@ nix_env()
     export PKG_CONFIG_PATH=~/nixbuild/lib/pkgconfig/:~/projects/webkit/WebKitBuild/Dependencies/Root/lib64/pkgconfig/
 }
 
+ns3_env()
+{
+    export PATH=~/bin/python2-as-default:${PATH}
+    export PS1="(ns3)${PS1}"
+}
+
 #_set_odd_aliases
 #_enable_icecc
 
