@@ -1,12 +1,13 @@
 # ugly workaround so that the screensaver won't show up when we are
 # watching a movie on mplayer. You should compile this small program
 # as well, naturally.
+# https://bugzilla.gnome.org/show_bug.cgi?id=579430#c13
 heartbeat-cmd="~/.mplayer/sendXShift"
 
 # Write your default config options here!
 cache=8000
-vo=vaapi
-vc=ffh264vdpau,ffmpeg12vdpau,
+#vo=vaapi
+#vc=ffh264vdpau,ffmpeg12vdpau,
 ao=alsa
 
 ass=true

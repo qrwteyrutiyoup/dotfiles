@@ -1,3 +1,4 @@
+/* https://bugzilla.gnome.org/show_bug.cgi?id=579430#c13 */
 #include <stdio.h>
 #include <stdlib.h>
 
