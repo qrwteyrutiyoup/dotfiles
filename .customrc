@@ -122,8 +122,8 @@ nix_env()
 
 ns3_env()
 {
-    export PATH=~/ns3-bin:${PATH}
-    export PS1="(ns3) ${PS1}"
+    export PATH=~/bin/python2-as-default:${PATH}
+    export PS1="(ns3)${PS1}"
 }
 
 #_set_odd_aliases

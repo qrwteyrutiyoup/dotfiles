@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # check if we have sudo already
-if ! which sudo >/dev/null 2>/dev/null; then
-    echo "Please install sudo first: # pacman -S sudo"
-    exit 1
-fi
+#if ! which sudo >/dev/null 2>/dev/null; then
+#    echo "Please install sudo first: # pacman -S sudo"
+#    exit 1
+#fi
 
-echo "Installing required packages, if needed"
+#echo "Installing required packages, if needed"
 #sudo pacman -S --needed gvim clang ctags git tmux xorg-xwininfo xorg-xprop gnome-terminal cmake ttf-ubuntu-font-family libxtst
 
 git submodule update --init
