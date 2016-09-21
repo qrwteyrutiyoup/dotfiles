@@ -1,2 +1,3 @@
 setxkbmap us intl
 export GTK_IM_MODULE=cedilla
+synclient TapButton1=1 TapButton2=3 TapButton3=2
