@@ -27,8 +27,8 @@ URxvt.lineSpace:            0
 URxvt.allow_bold:           true
 /* URxvt.font:                 -*-terminus-medium-r-normal-*-12-120-72-72-c-60-iso8859-1 */
 
-URxvt.font:     xft:ubuntu mono derivative powerline:size=11.5:antialias=true
-URxvt.boldFont: xft:ubuntu mono derivative powerline:style=bold:size=11.5:antialias=true
+URxvt.font:     xft:ubuntu mono derivative powerline:size=11.5:antialias=true,xft:symbola
+URxvt.boldFont: xft:ubuntu mono derivative powerline:style=bold:size=11.5:antialias=true,xft:symbola
 
 
 URxvt.letterSpace:      0
