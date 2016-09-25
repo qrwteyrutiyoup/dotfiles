@@ -250,10 +250,17 @@ _set_tmux()
     fi
 }
 
+_set_pc_type_in_x() {
+    if [ -n ${DISPLAY} ]; then
+        . ~/bin/zenbook-check
+    fi
+}
+
 _set_tmux
 _set_default_aliases_and_exports
 _set_ps1
 _set_dircolors
+_set_pc_type_in_x
 
 if [[ -f ~/.customrc ]]; then
     . ~/.customrc
