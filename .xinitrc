@@ -18,5 +18,7 @@ setxkbmap us intl
 export GTK_IM_MODULE=cedilla
 
 dropbox &
+nm-applet &
+random-wallpaper &
 exec dwm
 
