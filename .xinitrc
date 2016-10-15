@@ -1,16 +1,16 @@
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
-. ~/bin/zenbook-check
+. ~/bin/laptop-check
 
 if [ ${PC} = 'laptop' ]; then
-    xbacklight -set 20
-    synclient TapButton1=1 TapButton2=3 TapButton3=2
+  brightness-set 20
+  set-touchpad
 fi
 
 while true; do
-    dwm-statusbar
-    sleep 15
+  dwm-statusbar
+  sleep 15
 done &
 
 setxkbmap us intl
