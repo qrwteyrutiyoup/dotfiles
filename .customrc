@@ -131,3 +131,4 @@ ns3_env()
 
 if [[ -f ~/.virtualenvs/webkit/bin/activate ]]; then . ~/.virtualenvs/webkit/bin/activate; fi
 if [[ -f ~/.confidentialrc ]]; then . ~/.confidentialrc; fi
+export PATH=/usr/lib/sumo/tools:$PATH
