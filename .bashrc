@@ -254,7 +254,7 @@ _set_tmux()
 
 _set_pc_type_in_x() {
     if [ -n ${DISPLAY} ]; then
-        . ~/bin/zenbook-check
+        . ~/bin/laptop-check
     fi
 }
 
@@ -267,3 +267,4 @@ _set_pc_type_in_x
 if [[ -f ~/.customrc ]]; then
     . ~/.customrc
 fi
+
