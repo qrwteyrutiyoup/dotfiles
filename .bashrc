@@ -254,7 +254,9 @@ _set_tmux()
 
 _set_pc_type_in_x() {
     if [ -n ${DISPLAY} ]; then
+        if [[ -e ~/bin/zenbook ]]; then
         . ~/bin/zenbook-check
+        fi
     fi
 }
 
