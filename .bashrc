@@ -173,6 +173,10 @@ _set_ps1()
     else
         _set_regular_ps1
     fi
+
+    if [ -f /usr/lib/python2.7/site-packages/powerline/bindings/bash/powerline.sh ]; then
+        . /usr/lib/python2.7/site-packages/powerline/bindings/bash/powerline.sh
+    fi
 }
 
 _set_default_aliases_and_exports()
