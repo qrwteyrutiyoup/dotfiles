@@ -28,8 +28,11 @@ URxvt.lineSpace:            0
 URxvt.allow_bold:           true
 /* URxvt.font:                 -*-terminus-medium-r-normal-*-12-120-72-72-c-60-iso8859-1 */
 
-URxvt.font:     xft:ubuntu mono derivative powerline:size=11.5:antialias=true,xft:symbola
-URxvt.boldFont: xft:ubuntu mono derivative powerline:style=bold:size=11.5:antialias=true,xft:symbola
+#URxvt.font:     xft:ubuntu mono derivative powerline:size=11.5:antialias=true,xft:symbola
+#URxvt.boldFont: xft:ubuntu mono derivative powerline:style=bold:size=11.5:antialias=true,xft:symbola
+URxvt.font: xft:pragmatapro for powerline:size=9.5,xft:meguri:pixelsize=9.5,xft:PowerlineSymbols:size=9.5
+Urxvt.boldFont: xft:pragmatapro for powerline:size=9.5,xft:meguri:pixelsize=9.5,xft:PowerlineSymbols:size=9.5
+
 
 
 URxvt.letterSpace:      0
@@ -61,7 +64,7 @@ URxvt.pointerBlank:         true
 
 *background: #002b36
 #*background: rgba: 0000/2b00/3600/ffff
-URxvt.inheritPixmap: true
+#URxvt.inheritPixmap: true
 
 *foreground: #657b83
 !!*fading: 40
