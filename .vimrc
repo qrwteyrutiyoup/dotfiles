@@ -19,9 +19,26 @@ Bundle 'gmarik/vundle'
 " $ make ycm_core
 "Bundle 'Valloric/YouCompleteMe'
 
-"Easy tags
-Bundle 'xolox/vim-misc'
-Bundle 'xolox/vim-easytags'
+Plugin 'fatih/vim-go'
+Bundle 'tpope/vim-sensible'
+Bundle 'tpope/vim-surround'
+Bundle 'tpope/vim-fugitive'
+"Bundle 'tpope/vim-rails'
+"Bundle 'tpope/vim-rake'
+Bundle 'nanotech/jellybeans.vim'
+Bundle 'Lokaltog/vim-powerline'
+Bundle 'scrooloose/syntastic'
+Bundle 'scrooloose/nerdtree'
+Bundle 'kien/ctrlp.vim'
+Bundle 'majutsushi/tagbar'
+Bundle 'lervag/vimtex'
+
+"Bundle 'rking/ag.vim'
+"Bundle 'kana/vim-textobj-user'
+"Bundle 'nelstrom/vim-textobj-rubyblock'
+"Bundle 'slim-template/vim-slim'
+
+
 
 " ...
 
@@ -127,11 +144,45 @@ endif
     endif
 " }
 
-" EasyTags config
-let g:easytags_file = '~/.vim/tags'
-let g:easytags_autorecurse = 0
-let g:easytags_include_members = 1
-let g:easytags_resolve_links = 1
-let g:easytags_updatetime_warn = 0 " Disable ctags updatetime warnings
-let g:easytags_auto_highlight = 0
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+let g:vimtex_disable_version_warning = 1
+
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_types = 1
+
+hi  goSameId term=reverse ctermfg=7 ctermbg=3 guifg=#000000 guibg=#ce5c00
+let g:go_auto_sameids = 1
+
+"let g:go_fmt_command = "goimports"
+
+au FileType go nmap <F8> <Plug>(go-metalinter)
+let g:go_metalinter_deadline = "5s"
+
+let g:go_metalinter_enabled = [
+    \ 'deadcode',
+    \ 'errcheck',
+    \ 'gas',
+    \ 'goconst',
+    \ 'gocyclo',
+    \ 'golint',
+    \ 'gosimple',
+    \ 'ineffassign',
+    \ 'vet',
+    \ 'vetshadow'
+\]
+
+set rtp+=$GOPATH/src/github.com/golang/lint/misc/vim
