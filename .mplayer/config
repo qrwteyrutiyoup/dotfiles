@@ -8,6 +8,8 @@ heartbeat-cmd="~/.mplayer/sendXShift"
 cache=8000
 #vo=vaapi
 #vc=ffh264vdpau,ffmpeg12vdpau,
+vo=vaapi
+va=vaapi
 ao=alsa
 
 ass=true

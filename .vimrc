@@ -9,16 +9,6 @@ call vundle#rc()
 " $ git submodule update
 " $ BundleInstall [in vim]
 Bundle 'gmarik/vundle'
-
-" My Bundles here:
-"
-" original repos on github
-
-" To compile the required module, after BundleInstall:
-" $ cmake -G "Unix Makefiles" -DUSE_SYSTEM_LIBCLANG=ON . ~/.vim/bundle/YouCompleteMe/cpp
-" $ make ycm_core
-"Bundle 'Valloric/YouCompleteMe'
-
 Plugin 'fatih/vim-go'
 Bundle 'tpope/vim-sensible'
 Bundle 'tpope/vim-surround'
@@ -37,8 +27,6 @@ Bundle 'lervag/vimtex'
 "Bundle 'kana/vim-textobj-user'
 "Bundle 'nelstrom/vim-textobj-rubyblock'
 "Bundle 'slim-template/vim-slim'
-
-
 
 " ...
 
@@ -184,5 +172,4 @@ let g:go_metalinter_enabled = [
     \ 'vet',
     \ 'vetshadow'
 \]
-
 set rtp+=$GOPATH/src/github.com/golang/lint/misc/vim
