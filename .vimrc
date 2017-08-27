@@ -173,3 +173,10 @@ let g:go_metalinter_enabled = [
     \ 'vetshadow'
 \]
 set rtp+=$GOPATH/src/github.com/golang/lint/misc/vim
+let g:ycm_server_python_interpreter = '/usr/bin/python2'
+let g:ycm_global_ycm_extra_conf = '/usr/share/vim/vimfiles/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+"let g:ycm_server_keep_logfiles = 1
+"let g:ycm_server_log_level = 'debug'
+"
+let g:Powerline_symbols = 'fancy'
+let g:powerline_pycmd = "py3"
