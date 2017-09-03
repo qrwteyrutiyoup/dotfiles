@@ -26,13 +26,9 @@ URxvt.lineSpace:            0
 
 ! Fonts
 URxvt.allow_bold:           true
-/* URxvt.font:                 -*-terminus-medium-r-normal-*-12-120-72-72-c-60-iso8859-1 */
 
-#URxvt.font:     xft:ubuntu mono derivative powerline:size=11.5:antialias=true,xft:symbola
-#URxvt.boldFont: xft:ubuntu mono derivative powerline:style=bold:size=11.5:antialias=true,xft:symbola
-URxvt.font: xft:pragmatapro for powerline:size=9.5,xft:meguri:pixelsize=9.5,xft:PowerlineSymbols:size=9.5
-Urxvt.boldFont: xft:pragmatapro for powerline:size=9.5,xft:meguri:pixelsize=9.5,xft:PowerlineSymbols:size=9.5
-
+URxvt.font:     xft:roboto mono for powerline:size=11:antialias=true,xft:symbola
+URxvt.boldFont: xft:roboto mono for powerline:style=bold:size=11:antialias=true,xft:symbola
 
 
 URxvt.letterSpace:      0
@@ -105,6 +101,3 @@ URxvt.pointerBlank:         true
 *color7: #eee8d5
 *color15: #fdf6e3
 
-#URxvt.inputMethod: ibus
-#URxvt.preeditType: OverTheSpot
-#include "~/grayscale.dark"
