@@ -157,6 +157,7 @@ _set_extra_exports()
 {
   export PATH=/usr/lib/sumo/tools:${PATH}
   export SUMO_HOME=/usr/lib/sumo
+  export VDPAU_DRIVER=nvidia
 }
 
 _set_default_aliases_and_exports

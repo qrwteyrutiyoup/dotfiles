@@ -6,10 +6,11 @@ heartbeat-cmd="~/.mplayer/sendXShift"
 
 # Write your default config options here!
 cache=8000
-#vo=vaapi
+vo=vdpau
 #vc=ffh264vdpau,ffmpeg12vdpau,
-vo=vaapi
-va=vaapi
+vc=ffh264vdpau,ffmpeg12vdpau,ffodivxvdpau,ffwmv3vdpau,ffvc1vdpau,ffhevcvdpau
+#vo=vaapi
+#va=vaapi
 ao=alsa
 
 ass=true
