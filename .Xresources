@@ -24,11 +24,16 @@ URxvt.saveLines:            50
 URxvt.internalBorder:       3
 URxvt.lineSpace:            0
 
+
+
 ! Fonts
 URxvt.allow_bold:           true
+URxvt.font: xft:FantasqueSansMono\-Regular\-Powerline\-Awesome::size=9,xft:meguri:pixelsize=9.5,xft:PowerlineSymbols:size=9.5
+Urxvt.boldFont: xft:FantasqueSansMono\-Regular\-Powerline\-Awesome:size=9,xft:meguri:pixelsize=9.5,xft:PowerlineSymbols:size=9.5
 
-URxvt.font:     xft:roboto mono for powerline:size=11:antialias=true,xft:symbola
-URxvt.boldFont: xft:roboto mono for powerline:style=bold:size=11:antialias=true,xft:symbola
+
+#URxvt.font: xft:Fantasque Sans Mono::size=10,xft:meguri:pixelsize=9.5,xft:PowerlineSymbols:size=9.5
+#Urxvt.boldFont: xft:Fantasque Sans Mono:size=10,xft:meguri:pixelsize=9.5,xft:PowerlineSymbols:size=9.5
 
 
 URxvt.letterSpace:      0
