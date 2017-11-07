@@ -178,5 +178,7 @@ let g:ycm_global_ycm_extra_conf = '/usr/share/vim/vimfiles/third_party/ycmd/cpp/
 "let g:ycm_server_keep_logfiles = 1
 "let g:ycm_server_log_level = 'debug'
 "
-let g:Powerline_symbols = 'fancy'
+let g:airline_powerline_fonts=1
+let g:Powerline_symbols = 'unicode'
 let g:powerline_pycmd = "py3"
+
