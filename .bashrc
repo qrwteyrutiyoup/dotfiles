@@ -151,6 +151,11 @@ _set_keychain()
   if [[ -n "$TERM" ]]; then
     eval $(keychain -q --nogui --ignore-missing --eval id_rsa)
   fi
+
+  export GPG_TTY="$(tty)"
+  if [[ $(ps -U "$USER" -o ucomm | grep gpg-agent | wc -l) -eq 0 ]]; then
+    eval "$(gpg-agent --daemon | tee $gpg_agent_env} 2> /dev/null)"
+  fi
 }
 
 _set_extra_exports()
