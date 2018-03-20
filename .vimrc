@@ -15,13 +15,15 @@ Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-fugitive'
 "Bundle 'tpope/vim-rails'
 "Bundle 'tpope/vim-rake'
-Bundle 'nanotech/jellybeans.vim'
+"Bundle 'nanotech/jellybeans.vim'
 Bundle 'Lokaltog/vim-powerline'
 Bundle 'scrooloose/syntastic'
 Bundle 'scrooloose/nerdtree'
 Bundle 'kien/ctrlp.vim'
 Bundle 'majutsushi/tagbar'
 Bundle 'lervag/vimtex'
+"Plugin 'marcopaganini/termschool-vim-theme'
+Plugin 'rafi/awesome-vim-colorschemes'
 
 "Bundle 'rking/ag.vim'
 "Bundle 'kana/vim-textobj-user'
@@ -72,7 +74,8 @@ set switchbuf=useopen
 set clipboard=unnamedplus
 
 if (&t_Co == 256)
-    colorscheme jellybeans
+    "colorscheme jellybeans
+    colorscheme termschool
 endif
 
 highlight ExtraWhitespace ctermbg=darkred guibg=darkred
