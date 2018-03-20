@@ -63,7 +63,9 @@ URxvt.pointerBlank:         true
 
 !!Source http://github.com/altercation/solarized
 
-*background: #002b36
+#*background: #002b36
+*background: #252c31
+*foreground: #f0f0f0
 #*background: rgba: 0000/2b00/3600/ffff
 #URxvt.inheritPixmap: true
 
