@@ -1,6 +1,7 @@
 [user]
 	email = sergio@correia.cc
 	name = Sergio Correia
+	signingkey = 96FE4BB6
 [color]
     ui = auto
     diff = auto
@@ -8,3 +9,7 @@
     branch = auto
 [alias]
 	nothave = !git status -u | grep -Fv \"../\"
+	logs = log --show-signature
+    cis = commit -S
+[commit]
+    gpgSign = true
