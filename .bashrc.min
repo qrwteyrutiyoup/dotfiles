@@ -1,8 +1,14 @@
-#!/use/bin/env bash
+#!/usr/bin/env bash
 
 # If not running interactively, do not do anything.
 [[ $- != *i* ]] && return
 
+# Enable bash-completion
+if [ -f /usr/share/bash-completion/bash_completion ]; then
+  . /usr/share/bash-completion/bash_completion
+elif [ -f /etc/bash_completion ]; then
+  . /etc/bash_completion
+fi
 
 _set_ansi_dircolors()
 {
@@ -26,7 +32,7 @@ __git_ps1()
 
 _ps1_terminator_char()
 {
-  if [ $(whoami) == "root" ]; then
+  if [ $(whoami) = "root" ]; then
     printf '#'
   else
     printf '$'
@@ -128,7 +134,7 @@ _set_keychain()
 
   export GPG_TTY="$(tty)"
   if [[ $(ps -U "$USER" -o ucomm | grep gpg-agent | wc -l) -eq 0 ]]; then
-    eval "$(gpg-agent --daemon | tee $gpg_agent_env 2> /dev/null)"
+    eval "$(gpg-agent --daemon 2> /dev/null)"
   fi
 }
 
