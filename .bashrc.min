@@ -2,6 +2,7 @@
 
 # If not running interactively, do not do anything.
 [[ $- != *i* ]] && return
+[ -e /etc/profile ] && . /etc/profile
 
 # Enable bash-completion
 if [ -f /usr/share/bash-completion/bash_completion ]; then
@@ -130,12 +131,34 @@ _set_keychain()
 
   if [[ -n "$TERM" ]]; then
     eval $(keychain -q --nogui --ignore-missing --eval id_rsa)
+    eval $(keychain -q --nogui --ignore-missing --eval qrwteyrutiyoup-gitlab)
   fi
-
   export GPG_TTY="$(tty)"
-  if [[ $(ps -U "$USER" -o ucomm | grep gpg-agent | wc -l) -eq 0 ]]; then
-    eval "$(gpg-agent --daemon 2> /dev/null)"
+  if [[ $(ps -U "$USER" -o ucomm | grep gpg-agent  | grep -v grep | wc -l) -eq 0 ]]; then
+    eval "$(gpg-agent --daemon | tee $gpg_agent_env 2> /dev/null)"
   fi
+}
+
+sshrm() {
+  if [ -z "${1}" ]; then
+    return 1
+  fi
+  # Remove from known hosts.
+  sed -i "/^${1}/d" ~/.ssh/known_hosts
+}
+
+fmf_deps() {
+  _extra="${*}"
+  [ -r main.fmf ] || return 1
+  deps="$(awk ' \
+    /^require:/ {flag=1; next} \
+    /^recommend:/ {flag=2; next} \
+    /^[a-zA-Z]+:/ {flag=0; next} \
+    flag == 1 && NF {print "require:", $0}    # NF checks non-empty \
+    flag == 2 && NF {print "recommend:", $0} \
+    ' main.fmf  | awk '{ print $3 }' | tr '\n' ' ')"
+  [ -z "${deps}" ] && return 0
+  dnf install --skip-broken ${_extra} ${deps}
 }
 
 _set_default_aliases_and_exports
