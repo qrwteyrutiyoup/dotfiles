@@ -11,6 +11,8 @@ elif [ -f /etc/bash_completion ]; then
   . /etc/bash_completion
 fi
 
+[ -e /etc/profile ] && . /etc/profile
+
 _set_ansi_dircolors()
 {
   local DIRCOLORS=~/.dircolors.ansi.dark
@@ -129,12 +131,13 @@ _set_keychain()
     return 0
   fi
 
-  if [[ -n "$TERM" ]]; then
-    eval $(keychain -q --nogui --ignore-missing --eval id_rsa)
-    eval $(keychain -q --nogui --ignore-missing --eval qrwteyrutiyoup-gitlab)
+  if [ -n "$TERM" ]; then
+    for k in id_rsa qrwteyrutiyoup-gitlab; do
+      [ -r ~/.ssh/"${k}" ] && eval $(keychain -q --nogui --ignore-missing --eval "${k}")
+    done
   fi
   export GPG_TTY="$(tty)"
-  if [[ $(ps -U "$USER" -o ucomm | grep gpg-agent  | grep -v grep | wc -l) -eq 0 ]]; then
+  if [[ $(ps -U "$USER" -o ucomm | grep gpg-agent | grep -v grep | wc -l) -eq 0 ]]; then
     eval "$(gpg-agent --daemon | tee $gpg_agent_env 2> /dev/null)"
   fi
 }
