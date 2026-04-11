@@ -1,0 +1,101 @@
+# Common shell config sourced by both .bashrc and .zshrc
+# Handles Linux/macOS differences via OS detection.
+
+# Detect OS
+case "$(uname -s)" in
+  Darwin) _OS=macos ;;
+  *)      _OS=linux ;;
+esac
+
+__git_ps1()
+{
+  local b="$(git symbolic-ref HEAD 2>/dev/null)";
+  if [ -n "$b" ]; then
+    printf " (%s)" "${b##refs/heads/}";
+  fi
+}
+
+_set_dircolors()
+{
+  local cmd
+  if command -v dircolors >/dev/null 2>&1; then
+    cmd=dircolors
+  elif command -v gdircolors >/dev/null 2>&1; then
+    cmd=gdircolors
+  else
+    return 0
+  fi
+  local DIRCOLORS=~/.dircolors
+  [ -r "$DIRCOLORS" ] && eval $($cmd "$DIRCOLORS")
+}
+
+_set_default_aliases_and_exports()
+{
+  # colorful ls aliases (macOS vs Linux)
+  if [ "$_OS" = "macos" ]; then
+    if command -v gls >/dev/null 2>&1; then
+      alias ls="gls --color"
+      alias l="gls -laFhrt --color"
+      alias ll="gls -laFh --color"
+    else
+      alias ls="ls -G"
+      alias l="ls -laFhrtG"
+      alias ll="ls -laFhG"
+    fi
+  else
+    alias ls="ls --color"
+    alias l="ls -laFhrt --color"
+    alias ll="ls -laFh --color"
+  fi
+
+  # it's better to be safer than sorry
+  alias cp="cp -i"
+  alias mv="mv -i"
+  alias rm="rm -i"
+
+  # making sure we have something usable when needed
+  export VISUAL=vim
+  export EDITOR=$VISUAL
+
+  # user-defined bin path to drop custom executables
+  export PATH=~/bin:$PATH
+
+  # nicer terminal colors, if available
+  if infocmp xterm-256color >/dev/null 2>&1; then export TERM=xterm-256color; fi
+}
+
+_set_keychain()
+{
+  if ! command -v keychain >/dev/null; then
+    return 0
+  fi
+
+  if [ -n "$TERM" ]; then
+    for k in id_rsa qrwteyrutiyoup-gitlab; do
+      [ -r ~/.ssh/"${k}" ] && eval $(keychain -q --nogui --ignore-missing --eval "${k}")
+    done
+  fi
+  export GPG_TTY="$(tty)"
+  if [ "$_OS" = "macos" ]; then
+    if ! pgrep -U "$USER" gpg-agent >/dev/null 2>&1; then
+      eval "$(gpg-agent --daemon 2>/dev/null)"
+    fi
+  else
+    if [ "$(ps -U "$USER" -o ucomm | grep gpg-agent | grep -v grep | wc -l)" -eq 0 ]; then
+      eval "$(gpg-agent --daemon 2>/dev/null)"
+    fi
+  fi
+}
+
+sshrm() {
+  if [ -z "${1}" ]; then
+    return 1
+  fi
+  if [ "$_OS" = "macos" ]; then
+    sed -i '' "/^${1}/d" ~/.ssh/known_hosts
+  else
+    sed -i "/^${1}/d" ~/.ssh/known_hosts
+  fi
+}
+
+# vim:set ts=2 sw=2 et:

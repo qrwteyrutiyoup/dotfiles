@@ -1,0 +1,55 @@
+# If not running interactively, do not do anything.
+[[ ! -o interactive ]] && return
+
+# Source common shell config (shared with bash)
+[ -f ~/.shellrc ] && . ~/.shellrc
+
+# Zsh completion
+autoload -Uz compinit && compinit
+
+# Key bindings: emacs-style line editing (same feel as bash defaults)
+bindkey -e
+
+# Alt-arrows for word navigation (matching .inputrc.min behavior)
+bindkey '\e[1;3D' backward-word
+bindkey '\e[1;3C' forward-word
+
+# History
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt SHARE_HISTORY
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+
+_set_ps1()
+{
+  if (( ${+commands[tput]} )) && tput setaf 1 &>/dev/null; then
+    local num_colors
+    num_colors=$(tput colors 2>/dev/null)
+    if [[ $num_colors -ge 256 ]]; then
+      local base0=$(tput setaf 244)
+      local yellow=$(tput setaf 136)
+      local blue=$(tput setaf 33)
+      local cyan=$(tput setaf 37)
+    else
+      local base0=$(tput setaf 12)
+      local yellow=$(tput setaf 3)
+      local blue=$(tput setaf 4)
+      local cyan=$(tput setaf 6)
+    fi
+    local bold=$(tput bold)
+    local reset=$(tput sgr0)
+    local termchar='%(!.#.$)'
+    setopt PROMPT_SUBST
+    PROMPT="${bold}${cyan}%n${base0}@${cyan}%m${base0}:${blue}%~${base0}${yellow}\$(__git_ps1)${base0}${termchar} ${reset}"
+  else
+    PROMPT='%n@%m:%~$(__git_ps1)%(!.#.$) '
+  fi
+}
+
+_set_ps1
+_set_dircolors
+_set_keychain
+
+# vim:set ts=2 sw=2 et:
