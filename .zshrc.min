@@ -48,6 +48,7 @@ _set_ps1()
   fi
 }
 
+_set_default_aliases_and_exports
 _set_ps1
 _set_dircolors
 _set_keychain
