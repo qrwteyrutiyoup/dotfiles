@@ -4,8 +4,13 @@
 # Source common shell config (shared with bash)
 [ -f ~/.shellrc ] && . ~/.shellrc
 
-# Zsh completion
-autoload -Uz compinit && compinit
+# Zsh completion (cached, regenerated once per day)
+autoload -Uz compinit
+if [[ -z ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
+  compinit
+else
+  compinit -C
+fi
 
 # Key bindings: emacs-style line editing (same feel as bash defaults)
 bindkey -e
@@ -21,6 +26,33 @@ SAVEHIST=10000
 setopt SHARE_HISTORY
 setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_SPACE
+
+_set_ps1_fast()
+{
+  local termchar='%(!.#.$)'
+  setopt PROMPT_SUBST
+  case "$TERM" in
+    *-256color|*-256colour|alacritty*)
+      local base0=$'\e[38;5;244m'
+      local yellow=$'\e[38;5;136m'
+      local blue=$'\e[38;5;33m'
+      local cyan=$'\e[38;5;37m'
+      ;;
+    xterm*|screen*|tmux*|rxvt*|linux|vt100)
+      local base0=$'\e[94m'
+      local yellow=$'\e[33m'
+      local blue=$'\e[34m'
+      local cyan=$'\e[36m'
+      ;;
+    *)
+      PROMPT='%n@%m:%~$(__git_ps1)%(!.#.$) '
+      return
+      ;;
+  esac
+  local bold=$'\e[1m'
+  local reset=$'\e[0m'
+  PROMPT="%{${bold}${cyan}%}%n%{${base0}%}@%{${cyan}%}%m%{${base0}%}:%{${blue}%}%~%{${base0}${yellow}%}\$(__git_ps1)%{${base0}%}${termchar} %{${reset}%}"
+}
 
 _set_ps1()
 {
@@ -42,15 +74,13 @@ _set_ps1()
     local reset=$(tput sgr0)
     local termchar='%(!.#.$)'
     setopt PROMPT_SUBST
-    PROMPT="${bold}${cyan}%n${base0}@${cyan}%m${base0}:${blue}%~${base0}${yellow}\$(__git_ps1)${base0}${termchar} ${reset}"
+    PROMPT="%{${bold}${cyan}%}%n%{${base0}%}@%{${cyan}%}%m%{${base0}%}:%{${blue}%}%~%{${base0}${yellow}%}\$(__git_ps1)%{${base0}%}${termchar} %{${reset}%}"
   else
     PROMPT='%n@%m:%~$(__git_ps1)%(!.#.$) '
   fi
 }
 
-_set_default_aliases_and_exports
-_set_ps1
-_set_dircolors
-_set_keychain
-
-# vim:set ts=2 sw=2 et:
+_set_default_aliases_and_exports_fast
+_set_ps1_fast
+_set_dircolors_fast
+_set_yubikey_piv_agent

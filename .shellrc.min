@@ -1,10 +1,10 @@
 # Common shell config sourced by both .bashrc and .zshrc
 # Handles Linux/macOS differences via OS detection.
 
-# Detect OS
-case "$(uname -s)" in
-  Darwin) _OS=macos ;;
-  *)      _OS=linux ;;
+# Detect OS ($OSTYPE is set by bash and zsh — no subprocess needed)
+case "$OSTYPE" in
+  darwin*) _OS=macos ;;
+  *)       _OS=linux ;;
 esac
 
 __git_ps1()
@@ -27,6 +27,26 @@ _set_dircolors()
   fi
   local DIRCOLORS=~/.dircolors
   [ -r "$DIRCOLORS" ] && eval $($cmd "$DIRCOLORS")
+}
+
+_set_dircolors_fast()
+{
+  local cache=~/.cache/dircolors.cache
+  local src=~/.dircolors
+  [ -r "$src" ] || return 0
+  if [ ! -f "$cache" ] || [ "$src" -nt "$cache" ]; then
+    local cmd
+    if command -v dircolors >/dev/null 2>&1; then
+      cmd=dircolors
+    elif command -v gdircolors >/dev/null 2>&1; then
+      cmd=gdircolors
+    else
+      return 0
+    fi
+    mkdir -p ~/.cache
+    $cmd "$src" > "$cache"
+  fi
+  eval "$(< "$cache")"
 }
 
 _set_default_aliases_and_exports()
@@ -64,6 +84,33 @@ _set_default_aliases_and_exports()
   if infocmp xterm-256color >/dev/null 2>&1; then export TERM=xterm-256color; fi
 }
 
+_set_default_aliases_and_exports_fast()
+{
+  if [ "$_OS" = "macos" ]; then
+    if command -v gls >/dev/null 2>&1; then
+      alias ls="gls --color"
+      alias l="gls -laFhrt --color"
+      alias ll="gls -laFh --color"
+    else
+      alias ls="ls -G"
+      alias l="ls -laFhrtG"
+      alias ll="ls -laFhG"
+    fi
+  else
+    alias ls="ls --color"
+    alias l="ls -laFhrt --color"
+    alias ll="ls -laFh --color"
+  fi
+
+  alias cp="cp -i"
+  alias mv="mv -i"
+  alias rm="rm -i"
+
+  export VISUAL=vim
+  export EDITOR=$VISUAL
+  export PATH=~/bin:$PATH
+}
+
 _set_keychain()
 {
   if ! command -v keychain >/dev/null; then
@@ -85,6 +132,66 @@ _set_keychain()
       eval "$(gpg-agent --daemon 2>/dev/null)"
     fi
   fi
+}
+
+_find_ykcs11()
+{
+  local lib
+  for lib in \
+    /opt/homebrew/lib/libykcs11.dylib \
+    /usr/local/lib/libykcs11.dylib \
+    /usr/lib/x86_64-linux-gnu/libykcs11.so \
+    /usr/lib64/libykcs11.so \
+    /usr/lib/libykcs11.so; do
+    if [ -f "$lib" ]; then
+      echo "$lib"
+      return 0
+    fi
+  done
+  return 1
+}
+
+_ykcs11_allow()
+{
+  local lib="$1" libdir="${1%/*}" allow="${1%/*}/*"
+  if [ -L "$lib" ]; then
+    local real
+    real="$(cd "$libdir" && \
+            cd "$(dirname "$(readlink "$lib" 2>/dev/null)")" 2>/dev/null && \
+            pwd)"
+    [ -n "$real" ] && [ "$real" != "$libdir" ] && allow="${allow},${real}/*"
+  fi
+  echo "$allow"
+}
+
+# YubiKey PIV SSH agent — replaces keychain's agent with one that
+# supports the -P whitelist needed for PKCS#11 on OpenSSH 10.x.
+# Uses a fixed socket so all terminals share one agent.
+_set_yubikey_piv_agent()
+{
+  local lib
+  lib="$(_find_ykcs11)" || return 0
+  local sock="$HOME/.ssh/agent/yubikey.sock"
+  export SSH_AUTH_SOCK="$sock"
+  if [ ! -S "$sock" ]; then
+    rm -f "$sock"
+    eval $(ssh-agent -s -a "$sock" -P "$(_ykcs11_allow "$lib")")
+    ssh-add -s "$lib"
+  fi
+}
+
+yk-ssh() {
+  if ssh-add -L >/dev/null 2>&1; then
+    echo "YubiKey already loaded."
+    return 0
+  fi
+  local lib
+  lib="$(_find_ykcs11)" || { echo "libykcs11 not found." >&2; return 1; }
+  local sock="$HOME/.ssh/agent/yubikey.sock"
+  rm -f "$sock"
+  eval $(ssh-agent -s -a "$sock" -P "$(_ykcs11_allow "$lib")")
+  export SSH_AUTH_SOCK="$sock"
+  ssh-add -s "$lib"
 }
 
 sshrm() {
